@@ -170,6 +170,7 @@
 
 
 !SLIDE smaller
+# Java fail #
 	@@@ java
 	public class Fact {
 	  static long factorial(long n) {
@@ -187,6 +188,7 @@
 
 
 !SLIDE 
+# ruby win #
 	@@@ ruby
 	def factorial(n)
 	  result = 1
@@ -221,6 +223,104 @@
 
 	#callback
 	widget.on_button_press { puts "Got Button Press" }
+
+!SLIDE bullets
+# begin,raise,rescue, throw, catch, WTF?? #
+* begin,raise,rescue => tratamento de exceções
+* throw, catch => controle de fluxo
+
+!SLIDE smaller
+# exceptions #
+
+	@@@ ruby
+	f = File.open("testfile")
+	begin
+	  # .. process
+	rescue
+	  # .. handle error
+	ensure
+	  f.close unless f.nil?
+	end
+
+	f = File.open("testfile")
+	begin
+	  # .. process
+	rescue
+	  # .. handle error
+	else
+	  puts "Congratulations-- no errors!"
+	ensure
+	  f.close unless f.nil?
+	end
+
+!SLIDE smaller
+# exceptions - retry #
+
+	@@@ruby
+	begin
+	  # First try an extended login. If it fails because the
+	  # server doesn't support it, fall back to a normal login
+
+	  if @esmtp then
+	    @command.ehlo(helodom)
+	  else
+	    @command.helo(helodom)
+	  end
+
+	rescue ProtocolError
+	  if @esmtp then
+	    @esmtp = false
+	    retry
+	  else
+	    raise
+	  end
+	end
+
+!SLIDE small
+# exceptions - raise#
+
+	@@@ruby
+	raise
+
+	raise "Missing name" if name.nil?
+
+	if i >= myNames.size
+	  raise IndexError, "#{i} >= size (#{myNames.size})"
+	end
+
+	raise ArgumentError, "Name too big", caller
+
+!SLIDE small
+# catch/throw - exemplo simples #
+
+	@@@ ruby
+	ret = catch(:x) {
+		(1..10).each do |i|
+		  (1..10).each do |j|
+		     if i==5 and j==6
+		       throw :x, "i=#{i}, j=#{6}"
+		     end
+		  end
+		end 
+	      }
+	puts ret
+
+!SLIDE small bullets
+# exemplo real - Sinatra e Rack #
+
+	@@@ ruby
+	get '/foo' do
+	  last_modified some_timestamp
+	  # ...expensive GET logic...
+	end
+
+	def last_modified(time)
+	  response['Last-Modified'] = time
+	  if request.env['HTTP_IF_MODIFIED_SINCE'] > time
+	    throw :halt, response
+	  end
+	end
+* o *throw* não precisa estar no mesmo método do *catch*
 
 !SLIDE
 # pare de escrever tanto código! #
