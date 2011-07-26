@@ -1,0 +1,20 @@
+/* customr css and js files included at the top level of your presentation will
+ * will be included in your presentation */
+
+h1 {
+  color: Tomato;
+}
+
+.bullets ul li{
+  text-align: left;
+  margin-left: 100px;
+}
+
+.smbullets h1 {
+  color: Tomato;
+}
+
+.smbullets ul li{
+  text-align: left;
+  margin-left: 100px;
+}
